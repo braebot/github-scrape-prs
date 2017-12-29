@@ -9,9 +9,9 @@ class PrReader
 
     trimmed_pulls = []
     begin
+      puts "Fetching PRs"
       Octokit.auto_paginate = true
       pulls = github_repo.client.pulls("#{github_repo.org}/#{github_repo.repo}", :state => 'all')
-
       puts "Found #{pulls.length} PRs"
 
       pulls.each do |pull|
