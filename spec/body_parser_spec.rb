@@ -57,7 +57,28 @@ The why"""
         expect(parsed_pulls[0][:problem_statement]).to eql("The why")
         expect(parsed_pulls[0][:solution_statement]).to eql("The what")
       end
+
+      it "also returns parsed body" do
+        body = """### What
+Made the 
+
+### Why
+We currently use
+"""
+        trimmed_pulls = []
+        trimmed_pulls.push({
+          :html_url => "test_url",
+          :body => body
+        })
+        parsed_pulls = BodyParser.new().parse(trimmed_pulls)
+        expect(parsed_pulls.length).to eql(1)
+        expect(parsed_pulls[0][:html_url]).to eql("test_url")
+        expect(parsed_pulls[0][:template_format]).to eql("what_why")
+        expect(parsed_pulls[0][:problem_statement]).to eql("We currently use")
+        expect(parsed_pulls[0][:solution_statement]).to eql("Made the")
+      end
     end
+
 
     context "given a what/something else body" do
       it "returns a parsed body with only the solution filled in" do
@@ -69,6 +90,25 @@ The what
 ## Concerns
 
 The concerns"""
+        trimmed_pulls = []
+        trimmed_pulls.push({
+          :html_url => "test_url",
+          :body => body
+        })
+        parsed_pulls = BodyParser.new().parse(trimmed_pulls)
+        expect(parsed_pulls.length).to eql(1)
+        expect(parsed_pulls[0][:html_url]).to eql("test_url")
+        expect(parsed_pulls[0][:template_format]).to eql("what_only")
+        expect(parsed_pulls[0][:problem_statement]).to eql(nil)
+        expect(parsed_pulls[0][:solution_statement]).to eql("The what")
+      end
+    end
+
+    context "given a what-only body" do
+      it "returns a parsed body with only the solution filled in" do
+        body = """## What
+
+The what"""
         trimmed_pulls = []
         trimmed_pulls.push({
           :html_url => "test_url",
