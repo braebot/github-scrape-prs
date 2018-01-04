@@ -1,4 +1,4 @@
-require "github_repo"
+require_relative "github_repo"
 
 class PrReader
   def initialize()
